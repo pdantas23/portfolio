@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Philip Dantas · AI Builder</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2218%22%20fill%3D%22%23E2412B%22/%3E%3Ctext%20x%3D%2232%22%20y%3D%2242%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%20Black%2C%20Helvetica%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2226%22%20fill%3D%22%23fff%22%3EPD%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#E2412B">
+<meta name="description" content="Portfólio de Philip Dantas: produtos, automações e agentes de IA construídos e colocados em produção na RCO Hub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F2F3F5; --surface:#FFFFFF; --soft:#E8EAEE; --ink:#121418; --muted:#5A616D;
+  --line:#D8DBE1; --accent:#E2412B; --accent-ink:#FFFFFF; --accent-soft:#FBE3DF;
+  --ok:#1C7A60; --ok-soft:#DDF1EA; --warn:#A86A00; --chat:#E4F3E9; --chat-me:#FFFFFF;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1013; --surface:#161A1F; --soft:#1D2229; --ink:#ECEEF2; --muted:#9AA2AE;
+    --line:#2A2F38; --accent:#FF5B42; --accent-ink:#140806; --accent-soft:#3A1912;
+    --ok:#3FC89C; --ok-soft:#11302A; --warn:#E6A93A; --chat:#173126; --chat-me:#1F242B;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1013; --surface:#161A1F; --soft:#1D2229; --ink:#ECEEF2; --muted:#9AA2AE;
+  --line:#2A2F38; --accent:#FF5B42; --accent-ink:#140806; --accent-soft:#3A1912;
+  --ok:#3FC89C; --ok-soft:#11302A; --warn:#E6A93A; --chat:#173126; --chat-me:#1F242B;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;text-wrap:balance}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* layout: uma coluna */
+.page{max-width:1280px;margin:0 auto;padding:96px 16px 24px}
+@media (min-width:720px){.page{padding:104px 32px 32px}}
+.navbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  width:min(1180px,calc(100% - 24px));margin:0;padding:8px 8px 8px 14px;border-radius:999px;
+  background:color-mix(in srgb,var(--surface) 70%,transparent);border:1px solid color-mix(in srgb,var(--line) 80%,transparent);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  box-shadow:0 10px 30px -18px rgba(0,0,0,.35);transition:padding .3s ease,box-shadow .3s ease,width .3s ease}
+.navbar.scrolled{width:min(760px,calc(100% - 24px));box-shadow:0 14px 40px -16px rgba(0,0,0,.45)}
+.nav-name{display:flex;align-items:center;gap:10px;font:700 15px var(--display);text-decoration:none;color:var(--ink);white-space:nowrap}
+.nav-name .mark{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font:800 12.5px var(--display);letter-spacing:.02em}
+.nav-name .full{display:none}
+@media (min-width:560px){.nav-name .full{display:inline}}
+.nav-links{position:relative;display:flex;align-items:center;gap:4px}
+.nav-links a{position:relative;z-index:1;font:500 14px var(--body);color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:999px;transition:color .25s ease}
+.nav-links a:hover,.nav-links a.cur{color:var(--ink)}
+.nav-pill{position:absolute;z-index:0;top:50%;height:34px;transform:translateY(-50%);border-radius:999px;background:var(--soft);opacity:0;transition:left .35s cubic-bezier(.22,1,.36,1),width .35s cubic-bezier(.22,1,.36,1),opacity .2s ease}
+.nav-sep{width:1px;height:20px;background:var(--line);margin:0 6px}
+#sobre,#solucoes,#habilidades,#projetos{scroll-margin-top:90px}
+.theme-tg{width:42px;height:42px;border:0;padding:0;background:none;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:transform .2s ease}
+.theme-tg:hover{transform:rotate(-12deg)}
+.theme-tg svg{width:22px;height:22px;overflow:visible}
+.theme-tg .core{transition:r .45s cubic-bezier(.5,1.6,.4,1)}
+.theme-tg .cut{transition:transform .45s ease}
+.theme-tg .rays{transform-origin:12px 12px;transition:transform .45s ease,opacity .3s ease}
+:root[data-theme="dark"] .theme-tg .core{r:8px}
+:root[data-theme="dark"] .theme-tg .cut{transform:translate(0,0)}
+:root[data-theme="dark"] .theme-tg .rays{opacity:0;transform:rotate(-90deg) scale(.4)}
+:root:not([data-theme="dark"]) .theme-tg .core{r:5px}
+:root:not([data-theme="dark"]) .theme-tg .cut{transform:translate(9px,-9px)}
+
+/* apresentação */
+header.me{display:grid;gap:28px;margin-bottom:64px}
+.intro{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;align-items:center}
+@media (min-width:900px){.intro{grid-template-columns:max-content minmax(0,1fr);gap:40px;align-items:start}}
+.left{display:grid;gap:20px;justify-items:start}
+.photo{width:160px;height:160px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:800 48px var(--display);overflow:hidden}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.intro-text{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;min-width:0}
+.me h1{font-size:clamp(40px,7vw,60px);font-weight:800;letter-spacing:-.03em}
+.me p{margin:0;font-size:17px;line-height:1.7;color:var(--muted)}
+.me p b{color:var(--ink);font-weight:600}
+.socials{display:grid;gap:10px}
+.socials a{display:flex;align-items:center;gap:10px;text-decoration:none;font-size:14.5px;color:var(--ink);transition:transform .2s ease}
+.socials a span{white-space:nowrap}
+.socials a::after{content:"↗";color:var(--muted);font-size:14px;opacity:0;transform:translate(-4px,2px);transition:opacity .2s ease,transform .2s ease}
+.socials a:hover::after,.socials a:focus-visible::after{opacity:1;transform:translate(0,0)}
+.socials svg{width:20px;height:20px;display:block;flex:none}
+.sec-title{font:500 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 24px;padding-top:24px;border-top:1px solid var(--line)}
+
+
+/* fundo animado do hero */
+html,body{overflow-x:clip}
+header.me{position:relative;isolation:isolate}
+.hero-canvas{position:absolute;z-index:-1;top:-140px;bottom:-60px;left:50%;width:100vw;height:auto;transform:translateX(-50%);pointer-events:none;
+  -webkit-mask-image:linear-gradient(to bottom,#000 65%,transparent);mask-image:linear-gradient(to bottom,#000 65%,transparent)}
+
+/* título com texto rotativo (portado do TextRotate da LP da Opalê) */
+.me h1.hello{font-size:clamp(24px,4vw,50px);line-height:1.2;min-width:0;overflow-x:clip}
+.hello .line1{display:block;white-space:nowrap}
+.keep{display:block;white-space:nowrap;margin-top:.08em}
+.rot{display:inline-flex;vertical-align:bottom;background:var(--accent);color:var(--accent-ink);border-radius:10px;padding:0 .26em .04em;margin-left:0;line-height:1.12;overflow:hidden;transition:width .35s cubic-bezier(.22,1,.36,1);white-space:nowrap}
+.rot-in{display:inline-flex}
+.rot .w{display:inline-flex;overflow:hidden;padding-bottom:.02em}
+.rot .c{display:inline-block;transform:translateY(100%);opacity:0;transition:transform .42s cubic-bezier(.34,1.5,.64,1),opacity .25s ease}
+.rot .c.in{transform:translateY(0);opacity:1}
+.rot .c.out{transform:translateY(-120%);opacity:0;transition:transform .24s ease-in,opacity .2s ease-in}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* celular: foto, título em duas linhas sem quebra, texto e ícones centralizados no rodapé do hero */
+@media (max-width:899px){
+  .intro{grid-template-columns:auto minmax(0,1fr);grid-template-areas:"photo title" "text text" "social social";gap:18px 14px;align-items:center}
+  header.me{margin-bottom:32px}
+  .left,.intro-text{display:contents}
+  .photo{grid-area:photo;width:64px;height:64px;font-size:22px}
+  .intro-text h1{grid-area:title}
+  .intro-text p{grid-area:text}
+  .socials{grid-area:social;display:flex;justify-content:center;gap:26px;margin-top:2px}
+  .socials a span,.socials a::after{display:none}
+  .socials svg{width:21px;height:21px}
+  .navbar{padding:6px 6px 6px 10px;gap:8px}
+  .nav-links{gap:0}
+  .nav-links a{padding:7px 8px;font-size:12.5px;white-space:nowrap}
+  .nav-sep{display:none}
+  .theme-tg{width:36px;height:36px}
+}
+@media (max-width:480px){
+  .nav-name{display:none}
+  .navbar{justify-content:center}
+}
+@media (max-width:360px){
+  .nav-links a{padding:7px 4px;font-size:11.5px}
+  .theme-tg{width:32px;height:32px}
+  .navbar{padding:6px 4px 6px 8px}
+}
+
+
+/* soluções */
+.sol-sec{margin-bottom:56px}
+.sol-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:720px){.sol-grid{grid-template-columns:minmax(0,1fr);gap:12px}}
+.sol{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;gap:12px;padding:24px;min-height:240px;
+  background:var(--surface);border:1px solid var(--line);border-radius:20px;
+  background-image:radial-gradient(color-mix(in srgb,var(--ink) 9%,transparent) 1px,transparent 1px);background-size:16px 16px;background-position:-8px -8px;
+  transition:border-color .3s ease,transform .3s ease,box-shadow .3s ease}
+.sol::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(115deg,var(--surface) 46%,color-mix(in srgb,var(--surface) 30%,transparent))}
+.sol:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 50%,var(--line));box-shadow:0 20px 44px -28px rgba(0,0,0,.45)}
+.sol-top{display:flex;align-items:center;gap:12px}
+.sol-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);transition:transform .3s ease}
+.sol:hover .sol-ic{transform:rotate(-6deg) scale(1.05)}
+.sol-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sol-path{font:500 12px var(--mono);color:var(--muted);background:var(--soft);padding:4px 8px;border-radius:6px}
+.sol h3{font-size:22px;letter-spacing:-.01em;color:var(--ink);margin-top:6px;max-width:16ch}
+.sol p{margin:0;font-size:15px;line-height:1.6;color:var(--muted);max-width:44ch}
+.sol-kw{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:auto;padding-top:14px;border-top:1px dashed var(--line)}
+.sol-kw span{font:500 12px var(--mono);color:var(--muted)}
+.sol-kw span::before{content:"#";color:var(--accent);margin-right:3px}
+/* ilustração técnica no canto */
+.sol .art{position:absolute;z-index:-1;right:18px;top:18px;width:150px;height:auto;fill:none;stroke:color-mix(in srgb,var(--ink) 22%,transparent);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s ease,transform .4s ease}
+.sol .art circle{fill:color-mix(in srgb,var(--ink) 22%,transparent);stroke:none}
+.sol .art .d{stroke-dasharray:200;stroke-dashoffset:0;transition:stroke-dashoffset .9s ease,stroke .3s ease}
+.sol .art .bar{fill:color-mix(in srgb,var(--ink) 7%,transparent);transform-box:fill-box;transform-origin:bottom;transition:transform .5s cubic-bezier(.34,1.4,.64,1),fill .3s ease}
+.sol .art .btn-a{fill:color-mix(in srgb,var(--accent) 35%,transparent);stroke:none}
+.sol .art .dot{fill:var(--accent)}
+.sol:hover .art{transform:translateY(-2px)}
+.sol:hover .art .d{stroke:var(--accent);animation:draw .9s ease}
+.sol:hover .art .bar{fill:color-mix(in srgb,var(--accent) 22%,transparent)}
+.sol:hover .art .bar:nth-of-type(1){transform:scaleY(1.08)}
+.sol:hover .art .bar:nth-of-type(3){transform:scaleY(1.12)}
+.sol:hover .art .bar:nth-of-type(5){transform:scaleY(1.05)}
+@keyframes draw{from{stroke-dashoffset:200}to{stroke-dashoffset:0}}
+@media (max-width:720px){.sol{min-height:0;padding:20px}.sol .art{width:110px;opacity:.7}.sol h3{font-size:20px}}
+@media (prefers-reduced-motion: reduce){.sol .art .dot{display:none}}
+/* habilidades */
+.skills-sec{margin-bottom:56px}
+.skills{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+@media (max-width:600px){
+  .skills{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+  .skill{height:88px;padding:10px 4px;gap:6px;border-radius:14px}
+  .skill .ic{width:34px;height:34px;border-radius:10px}
+  .skill .ic img,.skill .ic svg{width:22px;height:22px}
+  .skill .nm{font-size:11px;line-height:1.15}
+  .skill .cat{display:none}
+}
+.skill{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;height:148px;padding:18px 12px;
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.skill:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));box-shadow:0 14px 30px -20px rgba(0,0,0,.4)}
+.skill .ic{width:48px;height:48px;border-radius:14px;background:var(--soft);display:grid;place-items:center}
+.skill .ic img,.skill .ic svg{width:30px;height:30px;display:block}
+.skill .nm{font:600 15px var(--display);color:var(--ink)}
+.skill .cat{font:500 10.5px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+:root[data-theme="dark"] .skill .ic img.inv{filter:invert(1)}
+:root[data-theme="dark"] .skill .wh-dark{stroke:#D5D7DC}
+/* projetos */
+main.projects{display:flex;flex-direction:column;gap:20px}
+.proj{display:flex;flex-direction:column;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:12px 12px 20px;transition:transform .2s ease,box-shadow .2s ease}
+.proj:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(0,0,0,.4)}
+.proj .shot{order:-1;border-radius:12px}
+@media (min-width:900px){main.projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch}}
+.proj h2{font-size:24px;letter-spacing:-.02em;padding:4px 6px 0}
+.shot{display:block;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--surface);aspect-ratio:16/10;position:relative;text-decoration:none}
+.shot img{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform .4s ease}
+.shot:hover img{transform:scale(1.02)}
+.shot .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--muted);font:500 13px var(--mono);background:var(--soft)}
+.shot .go{position:absolute;z-index:2;right:12px;bottom:12px;background:var(--ink);color:var(--bg);font:600 12.5px var(--body);padding:6px 12px;border-radius:999px;opacity:0;transition:opacity .2s}
+.shot:hover .go,.shot:focus-visible .go{opacity:1}
+.proj p{margin:0;color:var(--muted);font-size:15px;padding:0 6px}
+.proj p b{color:var(--ink);font-weight:600}
+.proj p .hl{color:var(--accent);font-weight:600}
+.proj h2{color:var(--ink)}
+
+.end{color:var(--muted);font-size:13px;text-align:center;padding:8px 0 24px}
+</style>
+</head>
+<body>
+<nav class="navbar" aria-label="Seções">
+    <a class="nav-name" href="#sobre"><span class="mark">PD</span><span class="full">Philip Dantas</span></a>
+    <div class="nav-links">
+      <span class="nav-pill" id="navPill" aria-hidden="true"></span>
+      <a href="#sobre">Sobre mim</a>
+      <a href="#solucoes">Soluções</a>
+      <a href="#habilidades">Habilidades</a>
+      <a href="#projetos">Projetos</a>
+      <span class="nav-sep" aria-hidden="true"></span>
+      <button class="theme-tg" id="themeBtn" type="button" aria-label="Alternar tema claro e escuro">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <mask id="moonMask"><rect x="-6" y="-6" width="36" height="36" fill="#fff"/><circle class="cut" cx="17" cy="7" r="6.5" fill="#000"/></mask>
+        <circle class="core" cx="12" cy="12" r="5" fill="currentColor" mask="url(#moonMask)"/>
+        <g class="rays" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="12" y1="1.5" x2="12" y2="3.5"/><line x1="12" y1="20.5" x2="12" y2="22.5"/>
+          <line x1="1.5" y1="12" x2="3.5" y2="12"/><line x1="20.5" y1="12" x2="22.5" y2="12"/>
+          <line x1="4.6" y1="4.6" x2="6" y2="6"/><line x1="18" y1="18" x2="19.4" y2="19.4"/>
+          <line x1="4.6" y1="19.4" x2="6" y2="18"/><line x1="18" y1="6" x2="19.4" y2="4.6"/>
+        </g>
+      </svg>
+    </button>
+    </div>
+  </nav>
+
+<div class="page">
+  
+
+  <header class="me" id="sobre">
+    <canvas class="hero-canvas" id="heroBg" aria-hidden="true"></canvas>
+    <div class="intro">
+      <div class="left">
+        <div class="photo" id="photo"><img src="foto.jpg" alt="Foto de Philip Dantas" onerror="this.remove();document.getElementById('photo').textContent='PD'"></div>
+        <nav class="socials" aria-label="Contato">
+      <a href="mailto:philipmadantas123@gmail.com" title="philipmadantas123@gmail.com"><svg viewBox="52 42 88 66"><path fill="#4285f4" d="M58 108h14V74L52 59v43c0 3.32 2.69 6 6 6"/><path fill="#34a853" d="M120 108h14c3.32 0 6-2.69 6-6V59l-20 15"/><path fill="#fbbc04" d="M120 48v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2"/><path fill="#ea4335" d="M72 74V48l24 18 24-18v26L96 92"/><path fill="#c5221f" d="M52 51v8l20 15V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4 7.2"/></svg><span>philipmadantas123@gmail.com</span></a>
+      <a href="https://wa.me/5586995144311" target="_blank" rel="noopener" title="(86) 99514-4311"><svg viewBox="0 0 24 24"><path fill="#25D366" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg><span>(86) 99514-4311</span></a>
+      <a href="https://www.linkedin.com/in/philip-dantas-8b858631b" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg><span>philip-dantas</span></a>
+      <a href="https://github.com/pdantas23" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg><span>pdantas23</span></a>
+    </nav>
+      </div>
+      <div class="intro-text">
+        <h1 class="hello"><span class="line1">Olá, meu nome é Philip Dantas,</span><span class="keep">e eu desenvolvo <span class="rot" id="rot"><span class="sr" id="rotSr"></span><span class="rot-in" id="rotIn" aria-hidden="true"></span></span></span></h1>
+        <p>Desenvolvedor de software e soluções digitais, cursando o 6º período de Engenharia de Software. Construo <b>aplicações web</b>, <b>sistemas personalizados</b>, <b>APIs</b> e <b>automações de processos</b> com <b>TypeScript</b>, <b>React</b>, <b>Next.js</b>, <b>Node.js</b> e <b>PostgreSQL</b>, integrando plataformas por APIs REST e webhooks. Parto do processo de negócio para modelar a solução e conecto tecnologia, dados e estratégia comercial em sistemas que rodam no dia a dia das empresas.</p>
+      </div>
+    </div>
+  </header>
+
+    <section class="sol-sec" id="solucoes">
+    <h2 class="sec-title">Soluções</h2>
+    <div class="sol-grid">
+      <article class="sol sol-sistemas">
+        <svg class="art" viewBox="0 0 140 84" aria-hidden="true"><rect x="2" y="2" width="136" height="80" rx="8"/><path d="M2 16h136"/><circle cx="12" cy="9" r="2"/><circle cx="20" cy="9" r="2"/><circle cx="28" cy="9" r="2"/><path d="M36 16v66"/><path class="d" d="M8 26h20M8 36h16M8 46h18"/><path class="d" d="M46 28h52M46 40h76M46 52h64M46 64h40"/></svg>
+        <div class="sol-top"><span class="sol-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 8h18M7 12l2 2-2 2M11 16h4"/></svg></span><code class="sol-path">/sistemas</code></div>
+        <h3>Desenvolvimento de Sistemas</h3>
+        <p>Aplicações web, plataformas personalizadas e sistemas de gestão construídos a partir da necessidade específica de cada negócio.</p>
+        <div class="sol-kw"><span>aplicações web</span><span>plataformas</span><span>gestão</span></div>
+      </article>
+      <article class="sol sol-integracoes">
+        <svg class="art" viewBox="0 0 140 84" aria-hidden="true"><rect x="4" y="8" width="34" height="22" rx="6"/><rect x="102" y="8" width="34" height="22" rx="6"/><rect x="53" y="54" width="34" height="22" rx="6"/><path class="d flow" d="M38 19h64M21 30c0 24 32 35 32 35M119 30c0 24-32 35-32 35"/><circle class="dot" r="3"><animateMotion dur="2.8s" repeatCount="indefinite" path="M38 19h64"/></circle></svg>
+        <div class="sol-top"><span class="sol-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7 7.2l3.6 8.6M17 7.2l-3.6 8.6M7.2 6h9.6"/></svg></span><code class="sol-path">/integracoes</code></div>
+        <h3>Automações e Integrações</h3>
+        <p>Integrações entre sistemas com APIs REST e webhooks, automação de processos e fluxos de atendimento pelo WhatsApp.</p>
+        <div class="sol-kw"><span>APIs REST</span><span>webhooks</span><span>WhatsApp</span></div>
+      </article>
+      <article class="sol sol-dados">
+        <svg class="art" viewBox="0 0 140 84" aria-hidden="true"><path d="M8 76h126"/><rect class="bar" x="14" y="50" width="14" height="26" rx="3"/><rect class="bar" x="36" y="38" width="14" height="38" rx="3"/><rect class="bar" x="58" y="44" width="14" height="32" rx="3"/><rect class="bar" x="80" y="26" width="14" height="50" rx="3"/><rect class="bar" x="102" y="14" width="14" height="62" rx="3"/><path class="d" d="M21 40L43 28L65 34L87 16L109 6"/></svg>
+        <div class="sol-top"><span class="sol-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><code class="sol-path">/dados</code></div>
+        <h3>Dados e Dashboards</h3>
+        <p>Painéis gerenciais, indicadores de desempenho e visualização de dados para acompanhar resultados e decidir com clareza.</p>
+        <div class="sol-kw"><span>indicadores</span><span>painéis</span><span>análise</span></div>
+      </article>
+      <article class="sol sol-web">
+        <svg class="art" viewBox="0 0 140 84" aria-hidden="true"><rect x="2" y="2" width="136" height="80" rx="8"/><path d="M2 14h136"/><rect x="40" y="5" width="60" height="6" rx="3"/><path class="d" d="M28 32h84M40 42h60"/><rect class="btn-a" x="52" y="54" width="36" height="12" rx="6"/></svg>
+        <div class="sol-top"><span class="sol-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8h20M6 12h7M6 15h4"/><rect x="15" y="12" width="4" height="4" rx="1"/></svg></span><code class="sol-path">/web</code></div>
+        <h3>Experiências Web</h3>
+        <p>Landing pages, sites institucionais e interfaces responsivas com foco em usabilidade, apresentação e conversão.</p>
+        <div class="sol-kw"><span>landing pages</span><span>sites</span><span>conversão</span></div>
+      </article>
+    </div>
+  </section>
+
+    <section class="skills-sec" id="habilidades">
+    <h2 class="sec-title">Habilidades</h2>
+    <div class="skills">
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/javascript/javascript-original.svg" alt="" loading="lazy"></span><span class="nm">JavaScript</span><span class="cat">Linguagens</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/typescript/typescript-original.svg" alt="" loading="lazy"></span><span class="nm">TypeScript</span><span class="cat">Linguagens</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/java/java-original.svg" alt="" loading="lazy"></span><span class="nm">Java</span><span class="cat">Linguagens</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/html5/html5-original.svg" alt="" loading="lazy"></span><span class="nm">HTML</span><span class="cat">Linguagens</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/css3/css3-original.svg" alt="" loading="lazy"></span><span class="nm">CSS</span><span class="cat">Linguagens</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/react/react-original.svg" alt="" loading="lazy"></span><span class="nm">React</span><span class="cat">Front-end</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/nextjs/nextjs-original.svg" alt="" loading="lazy" class="inv"></span><span class="nm">Next.js</span><span class="cat">Front-end</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/tailwindcss/tailwindcss-original.svg" alt="" loading="lazy"></span><span class="nm">Tailwind CSS</span><span class="cat">Front-end</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/nodejs/nodejs-original.svg" alt="" loading="lazy"></span><span class="nm">Node.js</span><span class="cat">Back-end</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/express/express-original.svg" alt="" loading="lazy" class="inv"></span><span class="nm">Express</span><span class="cat">Back-end</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/spring/spring-original.svg" alt="" loading="lazy"></span><span class="nm">Spring Boot</span><span class="cat">Back-end</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/postgresql/postgresql-original.svg" alt="" loading="lazy"></span><span class="nm">PostgreSQL</span><span class="cat">Dados</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/supabase/supabase-original.svg" alt="" loading="lazy"></span><span class="nm">Supabase</span><span class="cat">Dados</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/firebase/firebase-original.svg" alt="" loading="lazy"></span><span class="nm">Firebase</span><span class="cat">Dados</span></div>
+      <div class="skill"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#7C5CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4c-2 0-3 1-3 3v2c0 1.5-1 2.5-2 3 1 .5 2 1.5 2 3v2c0 2 1 3 3 3"/><path d="M16 4c2 0 3 1 3 3v2c0 1.5 1 2.5 2 3-1 .5-2 1.5-2 3v2c0 2-1 3-3 3"/><circle cx="9.5" cy="12" r=".6" fill="#7C5CFF"/><circle cx="12" cy="12" r=".6" fill="#7C5CFF"/><circle cx="14.5" cy="12" r=".6" fill="#7C5CFF"/></svg></span><span class="nm">APIs REST</span><span class="cat">Integrações</span></div>
+      <div class="skill"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="#C73A63" d="M10.5 7.2a3.5 3.5 0 1 1 4.9 3.9L12 16.8"/><path stroke="#4B4B4B" class="wh-dark" d="M6.3 13.6a3.5 3.5 0 1 0 5.7 3.2h6.6"/><path stroke="#4A90D9" d="M19.8 15.4a3.5 3.5 0 1 0-4.3-5.4L12.3 4.6"/></svg></span><span class="nm">Webhooks</span><span class="cat">Integrações</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/git/git-original.svg" alt="" loading="lazy"></span><span class="nm">Git</span><span class="cat">Integrações</span></div>
+      <div class="skill"><span class="ic"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons/github/github-original.svg" alt="" loading="lazy" class="inv"></span><span class="nm">GitHub</span><span class="cat">Integrações</span></div>
+    </div>
+  </section>
+
+  <h2 class="sec-title" id="projetos">Projetos</h2>
+  <main class="projects" id="projects">
+    <article class="proj" id="p1">
+      <h2>SaaS RCO</h2>
+      <a class="shot" href="https://crm.rcoacademy.com.br" target="_blank" rel="noopener" aria-label="Abrir SaaS RCO">
+        <span class="ph">SaaS RCO<br>img/crm.jpg</span>
+        <img src="img/crm.jpg" alt="Tela do SaaS RCO" loading="lazy" onerror="this.remove()">
+        <span class="go">Abrir projeto ↗</span>
+      </a>
+      <p>Um CRM para empresas que acompanha a venda <span class="hl">de ponta a ponta, do anúncio ao fechamento</span>. Rastreia de qual campanha e anúncio veio cada lead e atende no WhatsApp com um <b>agente de IA</b> que pré-qualifica e passa a conversa para o atendente certo, com um resumo pronto. O time trabalha num <b>funil visual</b>, com distribuição automática dos leads, metas e métricas por vendedor. Quando a venda fecha, ela volta para o <b>Pixel da Meta</b> e para o <b>Google Ads</b>, e os anúncios aprendem quem compra. <span class="hl">Não cuida só do marketing: cuida também do atendimento.</span></p>
+    </article>
+
+    <article class="proj" id="p2">
+      <h2>CRM Interno RCO</h2>
+      <a class="shot" href="https://comercial.rcoacademy.com.br" target="_blank" rel="noopener" aria-label="Abrir CRM Interno RCO">
+        <span class="ph">CRM Interno RCO<br>img/comercial.jpg</span>
+        <img src="img/comercial.jpg" alt="Tela do CRM Interno RCO" loading="lazy" onerror="this.remove()">
+        <span class="go">Abrir projeto ↗</span>
+      </a>
+      <p>A <span class="hl">central de operação da RCO</span>: marketing, comercial, equipe e integrações num lugar só. Os leads de todas as landing pages entram sozinhos no funil certo, com a origem marcada e aviso no WhatsApp do time, e o <b>Radar de prospecção</b> traz ainda mais: encontra empresas do nicho no Google Maps, completa CNPJ e Instagram, dá uma nota e puxa conversa pelo WhatsApp com IA até entregar quem se interessou no funil. <b>Cada pessoa vê o que é dela</b>: o vendedor, seus leads e conversas; o desenvolvimento, suas tarefas; a gestão, as metas do mês, as métricas e a empresa inteira. <span class="hl">Todo mundo sabe o que precisa fazer e onde as coisas estão.</span></p>
+    </article>
+
+
+    <article class="proj" id="p4">
+      <h2>RCO Metrics</h2>
+      <a class="shot" href="#" aria-label="Abrir RCO Metrics">
+        <span class="ph">RCO Metrics<br>img/metrics.jpg</span>
+        <img src="img/metrics.jpg" alt="Tela do RCO Metrics" loading="lazy" onerror="this.remove()">
+        <span class="go">Abrir projeto ↗</span>
+      </a>
+      <p>Painel que junta os resultados dos anúncios da Meta de <span class="hl">todos os clientes da agência num lugar só</span>: investimento, impressões, cliques e custos, comparados com o período anterior e abertos por campanha, conjunto de anúncios e criativo. O gestor cadastra o cliente num <b>passo a passo</b>, conecta as contas de anúncio com <b>permissão só de leitura</b> e escolhe os indicadores do relatório. A partir daí, o <b>relatório chega sozinho no WhatsApp</b> do cliente todo dia, semana ou mês, depois que o próprio cliente confirma que quer receber. <span class="hl">Ninguém mais monta planilha de resultado à mão.</span></p>
+    </article>
+
+    <article class="proj" id="p5">
+      <h2>Landing Pages</h2>
+      <a class="shot" href="https://lp.rcohub.com.br" target="_blank" rel="noopener" aria-label="Abrir Landing Pages">
+        <span class="ph">Landing Pages<br>img/lps.jpg</span>
+        <img src="img/lps.jpg" alt="Tela do Landing Pages" loading="lazy" onerror="this.remove()">
+        <span class="go">Abrir projeto ↗</span>
+      </a>
+      <p><span class="hl">Mais de 15 projetos</span> de landing pages e sites para empresas de segmentos bem diferentes: arquitetura, advocacia, consórcio e seguros, moda e acessórios, uniformes, geradores, eventos e marketing. Cada página foi desenhada a partir do que aquela empresa precisava vender, com a <b>captação de leads feita sob medida</b>: formulário por etapas, quiz, simulador de consórcio e de orçamento, catálogo com pedido pelo WhatsApp, agendamento e até venda de ingressos com pagamento online. <span class="hl">Os leads não ficam soltos</span>: caem num painel próprio do cliente ou direto no CRM, prontos para o time comercial atender.</p>
+    </article>
+  </main>
+</div>
+
+<script>
+(() => {
+
+  // tema: o ícone mostra o tema atual (lua no escuro, sol no claro)
+  const root = document.documentElement;
+  let saved = null;
+  try { saved = localStorage.getItem('pf-theme'); } catch (e) {}
+  root.dataset.theme = saved || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('pf-theme', root.dataset.theme); } catch (e) {}
+  });
+
+
+
+  // fundo animado do hero: rede de pontos que se conectam, com brilhos suaves
+  (() => {
+    const cv = document.getElementById('heroBg');
+    const ctx = cv.getContext('2d');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let W = 0, H = 0, dpr = 1, pts = [], mouse = null, running = true, t = 0;
+    const rgb = name => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim().replace('#', '');
+      const n = parseInt(v.length === 3 ? v.split('').map(c => c + c).join('') : v, 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    };
+    let C = {};
+    const readColors = () => { C = { a: rgb('--accent'), o: rgb('--ok'), i: rgb('--ink') }; };
+    const rgba = (c, al) => `rgba(${c[0]},${c[1]},${c[2]},${al})`;
+    function size() {
+      const r = cv.getBoundingClientRect();
+      dpr = Math.min(devicePixelRatio || 1, 2);
+      W = r.width; H = r.height;
+      cv.width = W * dpr; cv.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const n = Math.min(90, Math.round(W * H / 15000));
+      pts = Array.from({ length: n }, () => ({
+        x: Math.random() * W, y: Math.random() * H,
+        vx: (Math.random() - .5) * .35, vy: (Math.random() - .5) * .35,
+        r: Math.random() * 1.6 + .8, hot: Math.random() < .14
+      }));
+    }
+    function frame() {
+      t += 0.004;
+      ctx.clearRect(0, 0, W, H);
+      // brilhos que passeiam devagar
+      const glow = (x, y, rad, c, al) => {
+        const g = ctx.createRadialGradient(x, y, 0, x, y, rad);
+        g.addColorStop(0, rgba(c, al)); g.addColorStop(1, rgba(c, 0));
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      };
+      glow(W * (.22 + .08 * Math.sin(t * 1.3)), H * (.35 + .12 * Math.cos(t)), Math.max(W, H) * .38, C.a, .16);
+      glow(W * (.78 + .07 * Math.cos(t * 1.1)), H * (.55 + .1 * Math.sin(t * 1.6)), Math.max(W, H) * .34, C.o, .12);
+      // pontos e ligações
+      const LINK = 150;
+      for (const p of pts) {
+        if (!still) {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < -20) p.x = W + 20; if (p.x > W + 20) p.x = -20;
+          if (p.y < -20) p.y = H + 20; if (p.y > H + 20) p.y = -20;
+          if (mouse) {
+            const dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.hypot(dx, dy);
+            if (d < 120 && d > 0) { p.x += dx / d * .6; p.y += dy / d * .6; }
+          }
+        }
+      }
+      for (let i = 0; i < pts.length; i++) {
+        const p = pts[i];
+        for (let j = i + 1; j < pts.length; j++) {
+          const q = pts[j], d = Math.hypot(p.x - q.x, p.y - q.y);
+          if (d < LINK) {
+            const hot = p.hot || q.hot;
+            ctx.strokeStyle = rgba(hot ? C.a : C.i, (1 - d / LINK) * (hot ? .35 : .14));
+            ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+          }
+        }
+        if (mouse) {
+          const d = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+          if (d < 200) {
+            ctx.strokeStyle = rgba(C.a, (1 - d / 200) * .45);
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+          }
+        }
+        ctx.fillStyle = p.hot ? rgba(C.a, .9) : rgba(C.i, .35);
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.hot ? p.r + .8 : p.r, 0, Math.PI * 2); ctx.fill();
+      }
+      if (running && !still) requestAnimationFrame(frame);
+    }
+    readColors(); size();
+    new ResizeObserver(() => { size(); if (still) frame(); }).observe(cv);
+    new MutationObserver(() => { readColors(); if (still) frame(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    addEventListener('pointermove', e => {
+      const r = cv.getBoundingClientRect();
+      const x = e.clientX - r.left, y = e.clientY - r.top;
+      mouse = (x >= 0 && y >= 0 && x <= r.width && y <= r.height) ? { x, y } : null;
+    }, { passive: true });
+    new IntersectionObserver(([e]) => {
+      const was = running; running = e.isIntersecting;
+      if (running && !was && !still) requestAnimationFrame(frame);
+    }).observe(cv);
+    frame();
+  })();
+
+  // texto rotativo do título: mesmo comportamento do TextRotate da Opalê
+  (() => {
+    const texts = matchMedia('(max-width:899px)').matches
+      ? ['aplicações web', 'sistemas', 'integrações', 'automações', 'dashboards', 'landing pages']
+      : ['aplicações web', 'sistemas sob medida', 'APIs e integrações', 'automações de processos', 'dashboards de dados', 'landing pages'];
+    window.__rotLongest = texts.reduce((a, b) => b.length > a.length ? b : a);
+    const box = document.getElementById('rot'), inner = document.getElementById('rotIn'), sr = document.getElementById('rotSr');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const STAGGER = 16, INTERVAL = 2100;
+    let i = 0;
+    const build = text => {
+      inner.innerHTML = '';
+      const words = text.split(' ');
+      words.forEach((w, wi) => {
+        const ws = document.createElement('span'); ws.className = 'w';
+        [...w].forEach(ch => { const c = document.createElement('span'); c.className = 'c'; c.textContent = ch; ws.appendChild(c); });
+        inner.appendChild(ws);
+        if (wi < words.length - 1) { const sp = document.createElement('span'); sp.textContent = '\u00a0'; inner.appendChild(sp); }
+      });
+      return [...inner.querySelectorAll('.c')];
+    };
+    const fitWidth = () => {
+      const cs = getComputedStyle(box);
+      box.style.width = (inner.scrollWidth + parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)) + 'px';
+    };
+    const show = text => {
+      sr.textContent = text;
+      const chars = build(text);
+      fitWidth();
+      const n = chars.length;
+      if (still) { chars.forEach(c => c.classList.add('in')); return; }
+      requestAnimationFrame(() => requestAnimationFrame(() =>
+        chars.forEach((c, k) => { c.style.transitionDelay = ((n - 1 - k) * STAGGER) + 'ms'; c.classList.add('in'); })));
+    };
+    const next = () => {
+      const chars = [...inner.querySelectorAll('.c')], n = chars.length;
+      i = (i + 1) % texts.length;
+      if (still) { show(texts[i]); return; }
+      chars.forEach((c, k) => { c.style.transitionDelay = ((n - 1 - k) * STAGGER) + 'ms'; c.classList.add('out'); });
+      setTimeout(() => show(texts[i]), 200 + n * STAGGER);
+    };
+    show(texts[0]);
+    document.fonts && document.fonts.ready.then(fitWidth);
+    addEventListener('resize', fitWidth);
+    setInterval(next, INTERVAL);
+  })();
+
+  // navbar: encolhe ao rolar e a pílula acompanha a seção visível
+  (() => {
+    const nav = document.querySelector('.navbar'), pill = document.getElementById('navPill');
+    const links = [...nav.querySelectorAll('.nav-links a')];
+    const place = a => {
+      if (!a) { pill.style.opacity = 0; return; }
+      pill.style.left = a.offsetLeft + 'px'; pill.style.width = a.offsetWidth + 'px'; pill.style.opacity = 1;
+    };
+    let cur = links[0];
+    const update = () => {
+      nav.classList.toggle('scrolled', scrollY > 40);
+      cur = links[0];
+      for (const l of links) { const s = document.querySelector(l.getAttribute('href')); if (s && s.getBoundingClientRect().top < innerHeight * .45) cur = l; }
+      links.forEach(l => l.classList.toggle('cur', l === cur));
+      place(cur);
+    };
+    links.forEach(l => {
+      l.addEventListener('mouseenter', () => place(l));
+      l.addEventListener('mouseleave', () => place(cur));
+    });
+    addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    nav.addEventListener('transitionend', () => place(cur));
+    update();
+  })();
+
+  // título sem quebra de linha: ajusta o tamanho da fonte para a frase caber na largura disponível
+  (() => {
+    const h1 = document.querySelector('h1.hello'), line = h1.querySelector('.line1');
+    const MAX = 52, MIN = 14;
+    // medidor invisível: "e eu desenvolvo" + a palavra mais longa da caixa
+    const meter = document.createElement('span');
+    meter.setAttribute('aria-hidden', 'true');
+    meter.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;left:0;top:0';
+    meter.innerHTML = 'e eu desenvolvo <span class="rot" style="width:auto"></span>';
+    meter.querySelector('.rot').textContent = window.__rotLongest;
+    // caixa de tamanho zero com overflow escondido: o medidor nunca alarga a página
+    const box0 = document.createElement('span');
+    box0.style.cssText = 'position:absolute;left:0;top:0;width:0;height:0;overflow:hidden';
+    box0.appendChild(meter);
+    h1.style.position = 'relative';
+    h1.appendChild(box0);
+    const fit = () => {
+      h1.style.fontSize = MAX + 'px';
+      const avail = h1.clientWidth, need = Math.max(line.scrollWidth, meter.scrollWidth);
+      const size = Math.max(MIN, Math.min(MAX, MAX * avail / need * 0.95));
+      h1.style.fontSize = size + 'px';
+      dispatchEvent(new Event('resize'));
+    };
+    fit();
+    document.fonts && document.fonts.ready.then(fit);
+    new ResizeObserver(fit).observe(h1.parentElement);
+  })();
+
+})();
+</script>
+</body>
+</html>
